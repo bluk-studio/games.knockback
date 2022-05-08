@@ -21,6 +21,8 @@ function InLobbyState_tick(player: player):
 
     stop
 
+  reveal all players to {_player}
+
   # Gamemode
   if {_player}'s gamemode isn't adventure:
     set {_player}'s gamemode to adventure

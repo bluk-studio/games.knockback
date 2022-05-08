@@ -11,3 +11,5 @@ function PlayingState_tick(player: player):
 
   if y coordinate of {_player}'s location <= {map::%{map::currentMap}%::deathLevel}:
     Player_died({_player})
+
+  reveal all players to {_player}
