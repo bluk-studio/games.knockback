@@ -1,0 +1,45 @@
+on death of a player:
+  force player to respawn
+  clear the drops
+
+# Predicting player death
+on damage of a player:
+  if victim's health - damage <= 0:
+    cancel event
+    Player_died(victim)
+
+# Player died function
+function Player_died(player: player):
+  delete {player::%{_player}%::states::inLobby::*}
+  set {player::%{_player}%::state} to "inLobby"
+  
+  set {_player}'s health to 10
+  set {_player}'s hunger bar to 10
+
+  # Appliying effects
+  apply potion of blindness of tier 4 to {_player} for 2 seconds
+  apply potion of slowness of tier 1 to {_player} for 1 seconds
+
+  # Sounds
+
+  # Checking information about killer
+  set {_lastDamagedBy} to {player::%{_player}%::lastDamagedBy}
+  set {_damagedTimeout} to {player::%{_player}%::lastDamagedBy::time}
+
+  delete {player::%{_player}%::lastDamagedBy}
+  delete {player::%{_player}%::lastDamagedBy::*}
+
+  {_lastDamagedBy} is set
+  if difference between now and {_damagedTimeout} >= 30 seconds:
+    delete {_lastDamagedBy}
+    delete {_damagedTimeout}
+  else:
+    # Broadcasting death message
+    broadcast "%{_plater}% killed by %{_lastDamagedBy}%"
+
+    # Adding kill to player
+    add 1 to {game::%{_lastDamagedBy}%::kills}
+
+on respawn:
+  # Teleporting to current map
+  Player_died(player)

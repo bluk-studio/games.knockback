@@ -1,0 +1,52 @@
+on place:
+  # Placing this block
+  if {player::%player%::state} is "playing":
+    event-block isn't concrete:
+      cancel event
+      stop
+      
+    Blocks_placedBlockWorker(location of event-block)
+  else:
+    if {player::%player%::state} isn't "none":
+      cancel event
+
+on break:
+  if {player::%player%::state} isn't "none":
+    cancel event
+
+function Blocks_placedBlockWorker(location: location):
+  # states: placed, half-decayed, decayed
+  set {_state} to "placed"
+  set {_timeout} to 10
+  set {_block} to block at {_location}
+  
+  # Adding this block to database
+  add {_location} to {blocks::placed::*}
+
+  # Starting worker
+  while true is true:
+    # Checking block state
+    if block at {_location} isn't {_block}:
+      stop
+
+    # Timeout
+    reduce {_timeout} by 0.05
+    if {_timeout} <= 0:
+      if {_state} is "placed":
+        set {_state} to "half-decayed"
+        
+        set block at {_location} to red concrete
+        set {_block} to block at {_location}
+
+        # Effects
+
+        set {_timeout} to 5
+      else if {_state} is "half-decayed":
+        remove {_location} from {blocks::placed::*}
+        set block at {_location} to air
+        
+        # Effects
+
+        stop
+
+    wait 1 tick

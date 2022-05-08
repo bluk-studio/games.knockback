@@ -1,0 +1,30 @@
+function AuthState_tick(player: player):
+  if {player::%{_player}%::states::auth::ticked} is not true:
+    # Cleaning
+    delete {player::%{_player}%::states::auth::*}
+    
+    set {player::%{_player}%::states::auth::ticked} to true
+
+    # Teleporting
+    set {_location} to location at -150, -18, 84 in world "lobby"
+    set {_location}'s yaw to -90
+    
+    teleport {_player} to {_location}
+    clear {_player}'s inventory
+
+  # Determining auth type (register/login)
+  if {player::%{_player}%::password} is not set:
+    set {_type} to "register"
+  else:
+    set {_type} to "login"
+
+  # Gamemode
+  if {_player}'s gamemode isn't adventure:
+    set {_player}'s gamemode to adventure
+
+  hide all players from {_player}
+
+  # Type-related tick
+  if {_type} is "register":
+    AuthState_register_tick({_player})
+  else if {_type} is "login":

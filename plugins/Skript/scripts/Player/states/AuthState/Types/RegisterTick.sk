@@ -1,0 +1,17 @@
+function AuthState_register_tick(player: player):
+  # Title
+  send title "Регистрация" with subtitle "/register [Пароль] [Повтор пароля]" to {_player} for 2 seconds with fade in 0 ticks and fade out 0 ticks
+
+  if {player::%{_player}%::states::auth::register::password} is set:
+    # +todo Registering
+
+    # Changing state
+    set {player::%{_player}%::state} to "inLobby"
+
+# Command
+command register [<text>] [<text>]:
+  trigger:
+    if arg 1 is arg 2:
+      set {player::%player%::states::auth::register::password} to arg 1 
+    else:
+      # Error

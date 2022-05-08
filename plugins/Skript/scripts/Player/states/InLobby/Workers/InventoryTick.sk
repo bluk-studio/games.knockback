@@ -1,0 +1,20 @@
+function InLobbyState_inventory_tick(player: player):
+  # Items
+  set {_item} to barrier named "&f"
+  set {_menu} to player head named "&fГлавное меню"
+
+  loop numbers from 9 to 35:
+    if slot loop-value of {_player}'s inventory isn't {_item}:
+      set slot loop-value of {_player}'s inventory to {_item}
+
+  loop numbers from 0 to 7:
+    if slot loop-value of {_player}'s inventory is {_item} or {_menu}:
+      set slot loop-value of {_player}'s inventory to air
+
+  # Main menu button
+  if {player::%{_player}%::state} is "inLobby":
+    if slot 8 of {_player}'s inventory isn't {_menu}:
+      set slot 8 of {_player}'s inventory to {_menu}
+  else:  
+    if slot 8 of {_player}'s inventory isn't arrow:
+      set slot 8 of {_player}'s inventory to arrow

@@ -1,0 +1,26 @@
+function InLobbyState_tick(player: player):
+  if {player::%{_player}%::states::inLobby::tick} is not true:
+    # Cleaning
+    delete {player::%{_player}%::states::inLobby::*}
+
+    set {player::%{_player}%::states::inLobby::tick} to true
+
+    # Teleporting player to current map
+    set {_map} to {map::currentMap}
+
+    {_map} is set
+    teleport {_player} to {map::%{_map}%::spawnpoint}
+    clear {_player}'s inventory
+
+    # Re-loading player inventory
+    PlayerInventory_load({_player})
+
+  # Cleaner
+  if {player::%{_player}%::state} isn't "inLobby":
+    delete {player::%{_player}%::states::inLobby::*}
+
+    stop
+
+  # Gamemode
+  if {_player}'s gamemode isn't adventure:
+    set {_player}'s gamemode to adventure

@@ -1,0 +1,22 @@
+function Items_getBow() :: item:
+  set {_item} to bow
+  add "{ItemId:""bow""}" to item-nbt of {_item}
+
+  enchant {_item} with knockback
+  enchant {_item} with unbreaking
+  set enchantment level of knockback on {_item} to 2
+
+  return {_item}
+
+on shoot:
+  event-projectile is arrow
+  if shooter is player:
+    # Finding slot with bow
+    loop numbers from 0 to 7:
+      if tag "ItemId" of item-nbt of slot loop-number of shooter's inventory is "bow":
+        set {_slot} to loop-number
+        exit 1 loop
+
+    wait 2 ticks
+
+    Items_startTimeout(shooter, Items_getBow(), 5, {_slot})

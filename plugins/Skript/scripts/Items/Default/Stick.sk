@@ -1,0 +1,8 @@
+function Items_getStick() :: item:
+  set {_item} to stick named "Палка"
+  add "{ItemId:""stick""}" to item-nbt of {_item}
+
+  enchant {_item} with knockback
+  set enchantment level of knockback on {_item} to 2
+
+  return {_item}

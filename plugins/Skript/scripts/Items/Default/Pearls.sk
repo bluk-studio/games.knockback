@@ -1,0 +1,21 @@
+function Items_getPearl() :: item:
+  set {_item} to ender pearl
+  add "{ItemId:""pearl""}" to item-nbt of {_item}
+
+  return {_item}
+
+on right click:
+  if tag "ItemId" of item-nbt of player's held item is "pearl":
+    {player::%player%::state} isn't "playing":
+      cancel event
+      stop
+
+    # Finding slot
+    loop numbers from 0 to 7:
+      if tag "ItemId" of item-nbt of slot loop-number of player's inventory is "pearl":
+        set {_slot} to loop-number
+        exit 1 loop
+
+    wait 2 ticks
+
+    Items_startTimeout(player, Items_getPearl(), 5, {_slot})

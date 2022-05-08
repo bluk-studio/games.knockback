@@ -1,0 +1,46 @@
+function PlayerInventory_load(player: player):
+  # Getting default inventory id
+  if PlayerInventory_isOkay({player::%{_player}%::inventoryId}) is false:
+    # Regenerating
+    set {player::%{_player}%::inventoryId} to PlayerInventory_createDefaultInventory()
+
+  set {_inventoryId} to {player::%{_player}%::inventoryId}
+
+  # Clearing player inventory
+  loop numbers from 0 to 7:
+    set slot loop-number of {_player}'s inventory to air
+
+  # Getting items and loading them
+  set {_items::*} to {inventory::%{_inventoryId}%::items::*}
+
+  set {_slot} to 0
+  loop {_items::*}:
+    set slot {_slot} of {_player}'s inventory to loop-value
+    add 1 to {_slot}
+
+command newInv:
+  trigger:
+    set {player::%player%::inventoryId} to PlayerInventory_createDefaultInventory()
+
+command load:
+  trigger:
+    PlayerInventory_load(player)
+
+# +todo something
+function PlayerInventory_isOkay(inventoryId: string) :: boolean:
+  if size of {inventory::%{_inventoryId}%::items::*} < 7:
+    return false
+  else:
+    # Checking items
+    set {_items::*} to "stick", "blocks", "pearl", "bow"
+
+    loop {inventory::%{_inventoryId}%::items::*}:
+      set {_id} to tag "ItemId" of item-nbt of loop-value
+
+      if {_items::*} contains {_id}:
+        remove {_id} from {_items::*}
+    
+    if size of {_items::*} <= 0:
+      return true
+    else:
+      return false

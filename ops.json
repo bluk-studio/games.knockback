@@ -1,1 +1,8 @@
-[]
+[
+  {
+    "uuid": "f1e8d4d0-54b9-3d56-b5d0-3ae953b8752f",
+    "name": "Dogleash",
+    "level": 4,
+    "bypassesPlayerLimit": false
+  }
+]

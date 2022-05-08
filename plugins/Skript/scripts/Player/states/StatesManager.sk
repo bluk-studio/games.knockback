@@ -1,0 +1,66 @@
+function States_startManager(player: player):
+  # Default state
+  set {player::%{_player}%::state} to "auth"
+
+  # Starting worker
+  while true is true:
+    if {_player} is offline:
+      stop
+
+    # Getting player's current state
+    if States_getStates() doesn't contain {player::%{_player}%::state}:
+      set {player::%{_player}%::state} to "auth"
+
+    if {_state} is not set:
+      set {_state} to {player::%{_player}%::state}
+
+    # New state is set
+    if {_state} isn't {player::%{_player}%::state}:
+      set {_newState} to {player::%{_player}%::state}
+
+    # Global workers
+    StateWorkers_bossbarTick({_player})
+
+    # State-related
+    if {_state} is "auth":
+      # Auth state
+      AuthState_tick({_player})
+    else if {_state} is "limbo":
+      # Limbo state
+      LimboState_tick({_player})
+
+    else if {_state} is "inLobby":
+      # inLobby state
+      InLobbyState_tick({_player})
+
+      InLobbyState_inventory_tick({_player})
+      PlayingState_bossbar_tick({_player})
+      
+    else if {_state} is "playing":
+      # Playing state
+      PlayingState_tick({_player})
+
+      InLobbyState_inventory_tick({_player})
+      PlayingState_bossbar_tick({_player})
+
+    # Updating state
+    if {_newState} is set:
+      delete {_newState}
+      set {_state} to {_newState}
+
+    wait 1 tick
+
+command state [<text>]:
+  trigger:
+    if arg 1 is set:
+      set {player::%player%::state} to arg-1
+    
+    send "state: %{player::%player%::state}%"
+
+# Available states list
+function States_getStates() :: strings:
+  return "none", "auth", "limbo", "inLobby", "playing"
+
+# global cleaner
+on quit:
+  delete {player::%player%::states::*}

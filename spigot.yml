@@ -157,6 +157,8 @@ world-settings:
     zombie-aggressive-towards-villager: true
     mob-spawn-range: 8
     dragon-death-sound-radius: 0
+  faweregentempworld:
+    verbose: false
 players:
   disable-saving: false
 advancements:

@@ -1,0 +1,4 @@
+on script unload:
+  # Deleting all blocks
+  loop {blocks::placed::*}:
+    set block at loop-value to air

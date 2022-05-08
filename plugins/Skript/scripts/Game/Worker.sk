@@ -1,0 +1,72 @@
+function Game_startWorker():
+  delete {game::*}
+  
+  broadcast "[debug] start game worker"
+
+  # Updating all limbo-players state
+  loop all players:
+    if {player::%loop-player%::state} is "limbo":
+      set {player::%loop-player%::state} to "inLobby"
+
+  # Starting worker
+  while true is true:
+    # Action
+    if {game::action} is set:
+      set {_action} to {game::action}
+      delete {game::action}
+
+      # Stop
+      if {_action} is "stop":
+        # Deleting all variables
+        delete {game::*}
+
+        # Updating player's states
+        loop all players:
+          set {player::%loop-player%::state} to "limbo"
+
+        stop
+
+      # Change map
+      else if {_action} is "changeMap":
+        # Deleting all game-related information
+        delete {game::*}
+
+        # Changing map
+        set {_mapId} to random element of {maps::*}
+        while {_mapId} is {map::currentMap}:
+          set {_mapId} to random element of {maps::*}
+          
+          add 1 to {_tries}
+          if {_tries} >= 3:
+            exit 1 loop
+
+        # Updating map
+        set {map::currentMap} to {_mapId}
+
+        # Teleporting players
+        loop all players:
+          if {player::%loop-player%::state} is "playing":
+            teleport loop-player to {map::%{_mapId}%::spawnpoint}
+
+        # Updating time
+        set {game::time} to 300
+
+    # Time
+    if {game::time} is not set:
+      set {game::time} to 300
+
+    reduce {game::time} by 0.05
+    if {game::time} <= 0:
+      set {game::action} to "changeMap"
+
+    wait 1 tick
+
+on script load:
+  wait 5 seconds
+
+  # Starting worker
+  Game_startWorker()
+
+# cleaner
+on script unload:
+  set {game::action} to "stop"

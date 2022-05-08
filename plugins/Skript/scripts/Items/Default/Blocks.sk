@@ -1,0 +1,10 @@
+function Items_getBlocks() :: item:
+  set {_item} to 16 concrete blocks
+  add "{ItemId:""blocks""}" to item-nbt of {_item}
+
+  return {_item}
+
+on right click:
+  if tag "ItemId" of item-nbt of player's held item is "blocks":
+    set {_item} to player's held item
+    set player's held item to 16 of {_item}

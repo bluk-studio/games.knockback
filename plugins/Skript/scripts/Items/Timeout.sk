@@ -1,0 +1,30 @@
+function Items_startTimeout(player: player, item: item, timeout: number, slot: number):
+  while true is true:
+    if {_player} is offline:
+      stop
+
+    if {player::%{_player}%::state} isn't "playing":
+      stop
+
+    if slot {_slot} of {_player}'s inventory isn't Items_getTimeoutHead({_timeout}):
+      set slot {_slot} of {_player}'s inventory to Items_getTimeoutHead({_timeout})
+
+    reduce {_timeout} by 0.05
+    if {_timeout} <= 0:
+      # Placing item
+      set slot {_slot} of {_player}'s inventory to {_item}
+      stop
+
+    wait 1 tick
+
+function Items_getTimeoutHead(time: number) :: item:
+  set {_time} to rounded {_time}
+
+  set {_seconds::5} to player head named "5"
+  set {_seconds::4} to player head named "4"
+  set {_seconds::3} to player head named "3"
+  set {_seconds::2} to player head named "2"
+  set {_seconds::1} to player head named "1"
+  set {_seconds::0} to player head named "0"
+
+  return {_seconds::%{_time}%}

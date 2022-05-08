@@ -1,0 +1,43 @@
+options:
+  messagesCount: 2
+
+function PlayingState_bossbar_tick(player: player):
+  if {player::%{_player}%::state} isn't "inLobby" or "playing":
+    # Hiding bossbar
+    delete {bossbar::%{_player}%::show}
+    stop
+
+  # Checking bossbar settings
+  set {bossbar::%{_player}%::show} to true
+
+  # Progress
+  set {_progress} to 100/300
+  set {bossbar::%{_player}%::progress} to {_progress} * {game::time}
+
+  # Different messages
+  if {player::%{_player}%::states::playing::bossbar::time} is not set:
+    set {player::%{_player}%::states::playing::bossbar::time} to 10
+    set {player::%{_player}%::states::playing::bossbar::message} to 1
+
+  set {_time} to {player::%{_player}%::states::playing::bossbar::time}
+  set {_messageId} to {player::%{_player}%::states::playing::bossbar::message}
+
+  reduce {_time} by 0.05
+  if {_time} <= 0:
+    # Changing message
+    add 1 to {_messageId}
+
+    if {_messageId} > {@messagesCount}:
+      set {_messageId} to 1
+
+    set {_time} to 10
+
+  # Updating variables
+  set {player::%{_player}%::states::playing::bossbar::time} to {_time}
+  set {player::%{_player}%::states::playing::bossbar::message} to {_messageId}
+
+  # Displaying message
+  set {_messages::1} to "Тестовое сообщение №1"
+  set {_messages::2} to "Тестовое сообщение №2"
+
+  set {bossbar::%{_player}%::message} to {_messages::%{_messageId}%}

@@ -1,0 +1,9 @@
+on damage of a player:
+  set victim's health to 10
+
+  attacker is player
+  {player::%victim%::state} is "playing":
+    set {player::%victim%::lastDamagedBy} to attacker
+    set {player::%victim%::lastDamagedBy::time} to now
+  else:
+    cancel event

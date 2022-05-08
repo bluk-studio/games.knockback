@@ -1,0 +1,19 @@
+function PlayerInventory_createDefaultInventory() :: string:
+  # Generating id
+  set {_id} to "%random integer between 00000 and 9999%"
+  broadcast "create new default inventory"
+
+  # Generating inventory items
+  loop 7 times:
+    add air to {_items::*}
+
+  # Weapons
+  set {_items::1} to Items_getStick()
+  set {_items::2} to Items_getBlocks()
+  set {_items::3} to Items_getPearl()
+  set {_items::4} to Items_getBow()
+  # set {_items::5} to gold pressure plate
+
+  set {inventory::%{_id}%::items::*} to {_items::*}
+
+  return {_id}

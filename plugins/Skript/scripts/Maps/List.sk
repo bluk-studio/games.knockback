@@ -1,0 +1,36 @@
+on script load:
+  # Loading all maps
+  set {map::1::spawnpoint} to location at 0.5, 60, 0.5 in world "map01"
+  set {map::1::deathLevel} to -40
+
+  # Bounds
+  set {map::1::bounds::*} to location at 8, 56, -8 in world "map01" and location at -8, 70, 8 in world "map01"
+
+  add 1 to {maps::*}
+
+  Maps_generateBounds()
+
+  # Current map
+  set {map::currentMap} to random element of {maps::*}
+
+function Maps_generateBounds():
+  # Looping through all available maps
+  loop {maps::*}:
+    set {_map} to loop-value
+
+    # Getting bounds information
+    set {_bound::1} to first element of {map::%{_map}%::bounds::*}
+    set {_bound::2} to last element of {map::%{_map}%::bounds::*}
+
+    {_bound::1} and {_bound::2} is set
+    
+    # Creating bound
+    create a new bound with id "mapLobby-%{_map}%" between {_bound::1} and {_bound::2}
+
+on script unload:
+  loop all bounds:
+    delete bound with id loop-bound's id
+
+  # Deleting map information
+  delete {maps::*}
+  delete {map::*}

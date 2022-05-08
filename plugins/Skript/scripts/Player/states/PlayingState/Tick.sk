@@ -1,0 +1,13 @@
+function PlayingState_tick(player: player):
+  if {player::%{_player}%::states::playing::tick} is not true:
+    # Cleaning
+    delete {player::%{_player}%::states::playing::*}
+
+    set {player::%{_player}%::states::playing::tick} to true
+
+  # Gamemode
+  if {_player}'s gamemode isn't survival:
+    set {_player}'s gamemode to survival
+
+  if y coordinate of {_player}'s location <= {map::%{map::currentMap}%::deathLevel}:
+    Player_died({_player})

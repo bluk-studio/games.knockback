@@ -1,0 +1,12 @@
+on join:
+  set join message to ""
+
+  clear player's inventory
+  set player's health to 10
+  set player's hunger to 10
+
+  # Starting StatesManager
+  States_startManager(player)
+
+on quit:
+  set quit message to ""

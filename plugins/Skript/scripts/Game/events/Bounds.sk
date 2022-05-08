@@ -1,0 +1,7 @@
+on bound enter:
+  if event-string contains "mapLobby":
+    set {player::%player%::state} to "inLobby"
+
+on bound exit:
+  if event-string contains "mapLobby":
+    set {player::%player%::state} to "playing"

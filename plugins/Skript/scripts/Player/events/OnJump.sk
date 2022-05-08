@@ -1,0 +1,11 @@
+on flight toggle:
+	player's gamemode is not creative:
+		cancel event
+		set player's flight state to false
+		push player upwards at speed 0.8
+		push player forwards at speed 0.8
+
+on jump:
+  {player::%player%::state} is "playing" or "inLobby"
+  block below player is not air or water:
+    set player's flight state to true

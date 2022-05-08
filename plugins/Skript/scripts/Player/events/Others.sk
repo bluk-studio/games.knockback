@@ -1,0 +1,15 @@
+on pickup:
+  cancel event
+
+on drop:
+  cancel event
+
+# on offhand switch:
+#   cancel event
+
+on inventory click:
+  set {_slots::*} to (numbers from 9 to 35) and 8
+  set {_index} to index of event-slot
+
+  if {_slots::*} contains {_index}:
+    cancel event

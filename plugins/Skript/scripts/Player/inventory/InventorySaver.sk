@@ -1,0 +1,23 @@
+on inventory click:
+  {player::%player%::state} is "inLobby" or "playing"
+
+  if event-inventoryaction is pickup all:
+    tag "ItemId" of item-nbt of event-slot is not set:
+      cancel event
+      stop
+  
+  if numbers from 0 to 7 contains index of event-slot:
+    wait 2 ticks
+
+    # Saving inventory
+    PlayerInventory_save(player)
+
+function PlayerInventory_save(player: player):
+  # Deleting saved inventory
+  set {_inventoryId} to {player::%{_player}%::inventoryId}
+  delete {inventory::%{_inventoryId}%::items::*}
+
+  # Saving
+  loop numbers from 0 to 7:
+    set {_item} to slot loop-number of {_player}'s inventory
+    add {_item} to {inventory::%{_inventoryId}%::items::*}

@@ -1,0 +1,25 @@
+function LimboState_tick(player: player):
+  if {player::%{_player}%::states::limbo::ticked} is not true:
+    delete {player::%{_player}%::states::limbo::*}
+
+    set {player::%{_player}%::states::limbo::ticked} to true
+
+    # Teleporting player
+    set {_location} to location at -150, -18, 84 in world "lobby"
+    set {_location}'s yaw to -90
+
+    teleport {_player} to {_location}
+    clear {_player}'s inventory
+
+  # cleaner
+  if {player::%{_player}%::state} isn't "limbo":
+    delete {player::%{_player}%::states::limbo::*}
+    
+    stop
+
+  if {_player}'s gamemode isn't adventure:
+    set {_player}'s gamemode to adventure
+
+  hide all players from {_player}
+
+  # Bossbar worker
